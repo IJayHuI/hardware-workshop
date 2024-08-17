@@ -1,0 +1,93 @@
+.noLogin {
+	width: 100vw;
+	height: 800px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.noLogin a {
+	color: black;
+}
+
+.noLogin a:hover {
+	text-decoration: underline;
+}
+
+.middle {
+	margin-bottom: 20px;
+}
+
+.middle .container {
+	min-height: 800px;
+}
+
+.title {
+	font-size: 40px;
+	margin-top: 100px;
+	text-align: center;
+}
+
+.commodities {
+	width: 100%;
+}
+
+.commodity {
+	width: 100%;
+	height: 200px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.commodityImg {
+	width: 100px;
+}
+
+.imgStyle {
+	border-radius: 10px;
+}
+
+.commodityInfo {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+button,
+input {
+	padding: 0px 15px;
+	height: 40px;
+	outline: none;
+	border: 1px solid black;
+	border-radius: 42px;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+button {
+	height: 42px;
+	border-color: var(--knowMoreButton);
+	background-color: var(--knowMoreButton);
+	cursor: pointer;
+	color: white;
+}
+
+.quantity {
+	width: 30px;
+	margin: 0 5px;
+	cursor: not-allowed;
+	text-align: center;
+}
+
+.substract,
+.add {
+	width: 42px;
+	height: 42px;
+}
+
+.delete {
+	background-color: red;
+	border-color: red;
+	margin-left: 20px;
+}

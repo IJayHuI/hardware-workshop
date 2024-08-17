@@ -1,0 +1,93 @@
+.topThree,
+.product {
+	display: grid;
+	gap: 12px;
+}
+
+.unit {
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+	position: relative;
+}
+
+.zIndex2 {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.text {
+	width: 100%;
+	height: 100%;
+	color: white;
+	text-align: center;
+}
+
+.text h1 {
+	padding-top: 55px;
+}
+
+.knowMoreButton {
+	position: absolute;
+	padding: 11px 21px;
+	border-radius: 44px;
+	background-color: var(--knowMoreButton);
+	color: white;
+	transition: background-color 0.18s;
+}
+
+.knowMoreButton:hover {
+	background-color: var(--knowMoreButtonHover);
+}
+
+.topThree .unit {
+	width: 100%;
+	height: 692px;
+	background-color: black;
+}
+
+.topThree .unit h1 {
+	font-size: 56px;
+}
+
+.topThree .unit p {
+	font-size: 28px;
+}
+
+.topThree .knowMoreButton {
+	top: 190px;
+}
+
+.topThree .unit:first-child {
+	height: 736px;
+	display: flex;
+	justify-content: center;
+}
+
+.product {
+	grid-template-columns: 1fr 1fr;
+	padding: 12px;
+}
+
+.product .unit {
+	height: 580px;
+	gap: 12px;
+	background-color: aliceblue;
+}
+
+.product .unit h1 {
+	font-size: 35px;
+}
+
+.product .unit p {
+	font-size: 20px;
+}
+
+.product .knowMoreButton {
+	top: 150px;
+}
