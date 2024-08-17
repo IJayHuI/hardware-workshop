@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>硬件工坊——登录</title>
+		<link rel="stylesheet" href="/css/main.css" />
+		<link rel="stylesheet" href="/css/login/login.css" />
+	</head>
+	<body>
+		<div class="box">
+			<div class="container">
+				<div class="top">
+					<a href="/index.html"><img src="/source/icon/home.svg" alt="" /> </a>
+					<a href="/pages/hardware.html?type=0">CPU</a>
+					<a href="/pages/hardware.html?type=1">主板</a>
+					<a href="/pages/hardware.html?type=2">内存</a>
+					<a href="/pages/hardware.html?type=3">显卡</a>
+					<a href="/pages/hardware.html?type=4">电源</a>
+					<a href="/pages/hardware.html?type=5">机箱</a>
+					<a href="/pages/hardware.html?type=6">散热器</a>
+					<a href="/pages/hardware.html?type=7">硬盘</a>
+					<a href="/pages/hardware.html?type=8">配件</a>
+					<a href="/pages/shoppingCart.html"><img src="/source/icon/shoppingCart.svg" alt="" /> </a>
+					<div class="search"><img src="/source/icon/search.svg" alt="" /></div>
+				</div>
+				<div class="searchState"></div>
+			</div>
+		</div>
+		<div class="middle">
+			<div class="container">
+				<div class="logIn">
+					<h1 class="title">登 录</h1>
+					<div class="content">
+						<input id="username" type="text" placeholder="请输入账号" />
+						<input id="password" type="password" placeholder="请输入密码" />
+						<div class="buttons">
+							<button class="button" onclick="logIn()">登 录</button>
+							<button class="button signInButton" onclick="toSignIn()">注 册</button>
+						</div>
+					</div>
+				</div>
+				<div class="signIn">
+					<h1 class="title">注 册</h1>
+					<div class="content">
+						<input id="usernameSign" type="text" placeholder="请输入账号" />
+						<input id="passwordSign" type="password" placeholder="请输入密码" />
+						<div class="buttons">
+							<button class="button" onclick="signIn()">注 册</button>
+							<button class="button signInButton" onclick="toLogIn()">已有账号，登录</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="bottom">
+			<p>Copyright &copy; 2024 胡杰、何佳伟、李文驰。 保留所有权利</p>
+			<p>
+				网页排版设计参考<span><a href="https://apple.com.cn">Apple</a></span>
+			</p>
+			<p>
+				网页图片素材参考<span>各大硬件官网、<a href="https://taobao.com">淘宝</a>、<a href="https://jd.com">京东</a></span>
+			</p>
+		</div>
+		<script src="/js/main.js"></script>
+		<script src="/js/login/login.js"></script>
+	</body>
+</html>
