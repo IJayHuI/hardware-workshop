@@ -1,10 +1,5 @@
-# Hardware-Workshop
+# Vue 3 + Vite
 
-大一下学期 JS 课程的实训项目。这次实训没有要求连接数据库，所以所有的资源全都在本地。因为上传到 GitHub 所以删除了大量的商品，每个品类只保留了一个。完整版本请前往[shop.jayhu.site](https://shop.jayhu.site)。
+This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
-使用 Local Storage 实现的登陆系统。
-
-默认账号密码为：
-
-账号: admin
-密码: 123456
+Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
