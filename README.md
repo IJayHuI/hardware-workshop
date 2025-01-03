@@ -1,3 +1,4 @@
-# Hardware Workshop 硬件工坊 v2.0
+# Hardware Workshop 硬件工坊 v2.1
 
-后端接入 Strapi 内容管理系统，前端使用 Vue + Vite 重新构建。
+- 商品详情页布局更新。
+- Bug 修复。
