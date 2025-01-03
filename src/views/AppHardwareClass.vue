@@ -31,7 +31,7 @@
 <template>
   <h1 class="page-title page-size">{{ type }}</h1>
   <app-hardware-class-banner></app-hardware-class-banner>
-  <h1 class="page-second-title page-size">查看所有 {{ type }}</h1>
+  <h1 class="page-second-title page-size">看看所有 {{ type }}</h1>
   <app-hardware-class-product></app-hardware-class-product>
 </template>
 

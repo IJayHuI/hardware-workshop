@@ -4,7 +4,7 @@
   import Password from 'primevue/password'
   import { useToast } from 'primevue/usetoast'
 
-  import { useLoadingStore, useLoginStore } from '../pinia'
+  import { useLoadingStore, useLoginStore, useCountCartStore } from '../pinia'
 
   import axios from 'axios'
   import router from '../router'
@@ -27,12 +27,13 @@
   const login = () => {
     useLoadingStore().loadingStatus = true
     axios
-      .post('/server/auth/local/', { identifier: userInfo.value.username, password: userInfo.value.password })
+      .post('/server/auth/local', { identifier: userInfo.value.username, password: userInfo.value.password })
       .then((response) => {
         sessionStorage.setItem('jwt', response.data.jwt)
-        useLoginStore().loginStatus = true
         sessionStorage.setItem('user', JSON.stringify(response.data.user))
         router.push('/')
+        useLoginStore().checkStatus()
+        useCountCartStore().getCount()
         toast.add({ severity: 'success', summary: '登录成功', life: 3000 })
       })
       .catch((error) => {
@@ -48,8 +49,9 @@
       .post('/server/auth/local/register', { username: newUserInfo.value.username, email: newUserInfo.value.mail, password: newUserInfo.value.password })
       .then((response) => {
         sessionStorage.setItem('jwt', response.data.jwt)
-        useLoginStore().loginStatus = true
         sessionStorage.setItem('user', JSON.stringify(response.data.user))
+        useLoginStore().loginStatus = true
+        useCountCartStore().getCount()
         router.push('/')
         toast.add({ severity: 'success', summary: '创建账号成功', life: 3000 })
       })

@@ -1,7 +1,7 @@
 <script setup>
   import { ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
-  import { useLoadingStore, useLoginStore, usebrowserLastProductStore } from '../pinia'
+  import { useLoadingStore, useLoginStore, usebrowserLastProductStore, useCountCartStore } from '../pinia'
 
   import Galleria from 'primevue/galleria'
   import { useToast } from 'primevue/usetoast'
@@ -17,16 +17,16 @@
   const getDatas = (model) => {
     useLoadingStore().loadingStatus = true
     axios
-      .get(`/server/hardware-workshop-products?populate=thumbnail&populate=introductionImage&fields[0]=name&fields[1]=price&fields[2]=model&filters[model][$eq]=${model}`)
+      .get(`/server/hardware-workshop-products?populate=thumbnail&populate=introductionImage&filters[model][$eq]=${model}`)
       .then((response) => {
         const data = response.data.data[0]
         images.value = data.thumbnail?.map((image) => ({
-          thumbnailImageSrc: 'https://server.jayhu.site' + image.url,
-          itemImageSrc: 'https://server.jayhu.site' + image.url
+          thumbnailImageSrc: 'https://strapi.jayhu.site' + image.url,
+          itemImageSrc: 'https://strapi.jayhu.site' + image.url
         }))
         summaryInfo.value = { price: data.price, name: data.name, model: data.model, id: data.documentId }
 
-        usebrowserLastProductStore().thunmnail = 'https://server.jayhu.site' + data.thumbnail[0].url
+        usebrowserLastProductStore().thunmnail = 'https://strapi.jayhu.site' + data.thumbnail[0].url
         usebrowserLastProductStore().name = data.name
         usebrowserLastProductStore().model = '/product-detail?model=' + data.model
 
@@ -36,10 +36,7 @@
         introductionImages.value.sort()
       })
       .finally(() => {
-        setTimeout(
-          () => (useLoadingStore().loadingStatus = false), // 结束 loading
-          500
-        )
+        setTimeout(() => (useLoadingStore().loadingStatus = false), 500)
       })
   }
 
@@ -56,7 +53,7 @@
     if (!useLoginStore().loginStatus) toast.add({ severity: 'error', summary: '您还未登录', life: 3000 })
     else {
       axios
-        .get(`/server/hardware-workshop-carts?filters[user][documentId][$eq]=${JSON.parse(sessionStorage.getItem('user')).documentId}&filters[model][documentId][$eq]=${summaryInfo.value.id}`, {
+        .get(`/server/hardware-workshop-carts?filters[user][documentId][$eq]=${JSON.parse(sessionStorage.getItem('user')).documentId}&filters[product][documentId][$eq]=${summaryInfo.value.id}`, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('jwt')}`,
             'Content-Type': 'application/json'
@@ -69,7 +66,7 @@
                 '/server/hardware-workshop-carts', // API 路径
                 {
                   data: {
-                    model: summaryInfo.value.id, // 关联的 HardwareWorkshopProduct 的 documentId
+                    product: summaryInfo.value.id, // 关联的 HardwareWorkshopProduct 的 documentId
                     count: 1, // 数量
                     user: JSON.parse(sessionStorage.getItem('user')).documentId // 关联的用户 ID
                   }
@@ -82,6 +79,7 @@
                 }
               )
               .then((response) => {
+                useCountCartStore().getCount()
                 toast.add({ severity: 'success', summary: '添加成功', life: 3000 })
               })
               .catch((error) => {
@@ -99,14 +97,12 @@
 <template>
   <div class="page-size">
     <div class="summary-info">
-      <Galleria :value="images" thumbnailsPosition="left" containerStyle="max-width: 600px; max-height:600px">
+      <Galleria :value="images" thumbnailsPosition="bottom" containerStyle="max-width: 600px; width: 40%">
         <template #item="slotProps">
-          <img :src="slotProps.item.itemImageSrc" style="width: 100%; height: 100%; object-fit: cover" />
+          <img :src="slotProps.item.itemImageSrc" style="width: 100%" />
         </template>
         <template #thumbnail="slotProps">
-          <div style="overflow: hidden">
-            <img :src="slotProps.item.thumbnailImageSrc" style="width: 100px; height: 100%" />
-          </div>
+          <img :src="slotProps.item.thumbnailImageSrc" style="width: 100px; height: 100px" />
         </template>
       </Galleria>
       <div class="product-info">
@@ -116,10 +112,10 @@
       </div>
     </div>
 
-    <div class="introduction">
+    <div class="introduction page-size">
       <h1>图文详情</h1>
       <template v-for="introductionImage in introductionImages">
-        <img :src="'https://server.jayhu.site' + introductionImage" />
+        <img :src="'https://strapi.jayhu.site' + introductionImage" />
       </template>
     </div>
   </div>
@@ -140,9 +136,11 @@
     align-items: center;
     gap: 35px;
   }
-
   .introduction img {
     width: 100%;
     float: left;
+  }
+  .page-size {
+    width: 80%;
   }
 </style>

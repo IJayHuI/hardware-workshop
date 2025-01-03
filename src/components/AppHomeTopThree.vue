@@ -7,18 +7,9 @@
 
   useLoadingStore().homeTopThreeLoading = false
   axios
-    .get('/server/hardware-workshop-homes?filters[priority][$lt]=4&populate=product&populate=image')
+    .get('/server/hardware-workshop-homes?sort[0]=priority:asc&filters[priority][$lt]=4&populate=product&populate=image')
     .then((response) => {
-      response.data.data.forEach((product) => {
-        topThreeProducts.value.push({
-          image: product.image.url,
-          model: product.product.model,
-          name: product.product.name,
-          subtitle: product.subtitle,
-          whiteFontColor: product.whiteFontColor,
-          id: product.product.documentId
-        })
-      })
+      topThreeProducts.value = response.data.data
     })
     .catch((error) => {
       console.error(error)
@@ -28,10 +19,10 @@
 <template>
   <div class="top-three">
     <template v-for="topThreeProduct in topThreeProducts">
-      <router-link :to="'/product-detail?model=' + topThreeProduct.model" class="link">
-        <img :src="'https://server.jayhu.site/' + topThreeProduct.image" />
+      <router-link :to="'/product-detail?model=' + topThreeProduct.product.model" class="link">
+        <img :src="'https://strapi.jayhu.site/' + topThreeProduct.image.url" />
         <div class="info">
-          <h1 :style="topThreeProduct.whiteFontColor ? 'color: white' : 'color: black'" style="font-size: 56px">{{ topThreeProduct.name }}</h1>
+          <h1 :style="topThreeProduct.whiteFontColor ? 'color: white' : 'color: black'" style="font-size: 56px">{{ topThreeProduct.product.name }}</h1>
           <p :style="topThreeProduct.whiteFontColor ? 'color: white' : 'color: black'" style="font-size: 28px" v-if="topThreeProduct.subtitle != null">{{ topThreeProduct.subtitle }}</p>
           <Button style="text-decoration: none; margin-top: 10px" label="进一步了解" severity="info" rounded></Button>
         </div>

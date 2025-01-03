@@ -12,18 +12,12 @@
   const getDatas = (path) => {
     useLoadingStore().productLoading = false
     axios
-      .get(`/server/hardware-workshop-products?populate=thumbnail&fields[0]=name&fields[1]=price&fields[2]=model&filters[class][$eq]=${path}`)
+      .get(`/server/hardware-workshop-products?populate=mainThumbnail&filters[type][$eq]=${path}`)
       .then((response) => {
-        products.value = []
-        response.data.data.forEach((product) => {
-          products.value.push(product)
-        })
+        products.value = response.data.data
       })
       .finally(() => {
-        setTimeout(
-          () => (useLoadingStore().productLoading = true), // 结束 loading
-          500
-        )
+        setTimeout(() => (useLoadingStore().productLoading = true), 500)
       })
   }
 
@@ -39,7 +33,7 @@
   <div class="products page-size">
     <Card class="product" v-for="product in products" :key="product.id" @click="router.push('/product-detail?model=' + product.model)">
       <template #header>
-        <div class="product-thumbnail"><img :src="`https://server.jayhu.site${product.thumbnail[0].url}`" alt="product thumbnail" /></div>
+        <div v-if="product.mainThumbnail != null" class="product-thumbnail"><img :src="`https://strapi.jayhu.site${product.mainThumbnail.url}`" alt="产品缩略图" /></div>
       </template>
       <template #title>
         <p>{{ product.name }}</p>

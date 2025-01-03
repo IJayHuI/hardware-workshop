@@ -1,6 +1,6 @@
 <script setup>
   import { ref } from 'vue'
-  import { useLoadingStore } from '../pinia'
+  import { useLoadingStore, useCountCartStore } from '../pinia'
 
   import DataTable from 'primevue/datatable'
   import Column from 'primevue/column'
@@ -15,49 +15,37 @@
   const getDatas = (username) => {
     useLoadingStore().loadingStatus = true
     axios
-      .get(`/server/hardware-workshop-carts?populate=model.thumbnail&populate=model&filters[user][documentId][$eq]=${username}`, {
+      .get(`/server/hardware-workshop-carts?populate=product.mainThumbnail&filters[user][documentId][$eq]=${username}`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('jwt')}`,
           'Content-Type': 'application/json'
         }
       })
       .then((response) => {
-        response.data.data.forEach((product) => {
-          products.value.push({
-            name: product.model.name,
-            count: product.count,
-            price: product.model.price,
-            thumbnail: product.model.thumbnail[0].url,
-            id: product.documentId
-          })
-          calcRMB(products.value)
-        })
+        products.value = response.data.data
+        countRMB.value = calcRMB(products.value)
       })
       .finally(() => {
-        setTimeout(
-          () => (useLoadingStore().loadingStatus = false), // 结束 loading
-          500
-        )
+        setTimeout(() => (useLoadingStore().loadingStatus = false), 500)
       })
   }
   getDatas(JSON.parse(sessionStorage.getItem('user')).documentId)
 
   const calcRMB = (products) => {
-    countRMB.value = 0
+    let rmb = 0
     products.forEach((product) => {
-      countRMB.value += product.price * product.count
+      rmb += product.product.price * product.count
     })
+    return rmb
   }
 
   const productCount = (data, num) => {
     data.count += num
-    calcRMB(products.value)
+    countRMB.value = calcRMB(products.value)
     axios
       .put(
-        '/server/hardware-workshop-carts/' + data.id,
-        {
-          data: { count: data.count }
-        },
+        '/server/hardware-workshop-carts/' + data.documentId,
+        { data: { count: data.count } },
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('jwt')}`,
@@ -72,21 +60,22 @@
 
   const deleteProduct = (data) => {
     axios
-      .delete('/server/hardware-workshop-carts/' + data.id, {
+      .delete('/server/hardware-workshop-carts/' + data.documentId, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('jwt')}`,
           'Content-Type': 'application/json'
         }
       })
       .then((response) => {
-        console.log(response)
         if (response.status == 204) {
-          toast.add({ severity: 'success', summary: '删除成功', life: 3000 })
+          useCountCartStore().getCount()
           products.value = products.value.filter((product) => product.id != data.id)
+          toast.add({ severity: 'success', summary: '删除成功', life: 3000 })
         }
       })
       .catch((error) => {
         console.error(error)
+        toast.add({ severity: 'error', summary: '删除失败', life: 3000 })
       })
   }
 </script>
@@ -96,17 +85,16 @@
   <h1 class="title" v-else>您的购物车是空的哦</h1>
   <div class="page-size" v-if="products.length > 0">
     <DataTable :value="products" tableStyle="min-width: 50rem">
-      <template #header>
-        <div style="display: flex; justify-content: space-between; align-items: center">
-          <h2>我的购物车</h2>
-        </div>
-      </template>
       <Column>
         <template #body="{ data }">
-          <img :src="`https://server.jayhu.site${data.thumbnail}`" style="width: 150px" />
+          <img :src="`https://strapi.jayhu.site${data.product.mainThumbnail.url}`" style="width: 150px; border-radius: 15px" />
         </template>
       </Column>
-      <Column field="name" header="产品名称"></Column>
+      <Column header="产品名称">
+        <template #body="{ data }">
+          <router-link :to="'/product-detail?model=' + data.product.model" class="link">{{ data.product.name }}</router-link>
+        </template>
+      </Column>
       <Column field="count" header="数量">
         <template #body="{ data }">
           <div class="count">
@@ -117,7 +105,7 @@
         </template>
       </Column>
       <Column field="price" header="价格">
-        <template #body="{ data }">单价：{{ data.price }}<br />总价：{{ data.price * data.count }}</template>
+        <template #body="{ data }">单价：{{ data.product.price }}<br />总价：{{ data.product.price * data.count }}</template>
       </Column>
       <Column>
         <template #body="{ data }">
@@ -139,5 +127,14 @@
     display: flex;
     align-items: center;
     gap: 10px;
+  }
+
+  .link {
+    color: unset;
+    text-decoration: none;
+  }
+
+  .link:hover {
+    text-decoration: underline;
   }
 </style>

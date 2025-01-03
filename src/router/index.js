@@ -4,7 +4,7 @@ import AppHome from '../views/AppHome.vue'
 import AppAccount from '../views/AppAccount.vue'
 import AppProductDetail from '../views/AppProductDetail.vue'
 import AppCart from '../views/AppCart.vue'
-import AppHardwareClass from '../views/AppHardWareClass.vue'
+import AppHardwareClass from '../views/AppHardwareClass.vue'
 import AppSearch from '../views/AppSearch.vue'
 
 const routes = [

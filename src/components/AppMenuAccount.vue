@@ -1,38 +1,21 @@
 <script setup>
-  import { ref } from 'vue'
-  import { useLoginStore, usebrowserLastProductStore } from '../pinia'
+  import { ref, watch } from 'vue'
+  import { useLoginStore, usebrowserLastProductStore, useCountCartStore } from '../pinia'
 
   import axios from 'axios'
 
-  const cartCount = ref(0)
-
   const logout = () => {
     sessionStorage.clear()
-    useLoginStore().loginStatus = false
+    useLoginStore().checkStatus()
   }
-
-  if (useLoginStore().loginStatus)
-    axios
-      .get(`/server/hardware-workshop-carts?filters[user][documentId][$eq]=${JSON.parse(sessionStorage.getItem('user')).documentId}`, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('jwt')}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      .then((response) => {
-        cartCount.value = response.data.data.length
-      })
-      .catch((error) => {
-        console.error('Error:', error)
-      })
 </script>
 <template>
   <div class="second-menu-size">
     <div class="cart" v-if="useLoginStore().loginStatus">
       <div class="left">
         <div class="cart-product">
-          <h2 v-if="cartCount == 0">您的购物袋是空的。</h2>
-          <h2 v-else>您的购物袋有 {{ cartCount }} 件商品。</h2>
+          <h2 v-if="useCountCartStore().count == 0">您的购物袋是空的。</h2>
+          <h2 v-else>您的购物袋有 {{ useCountCartStore().count }} 件商品。</h2>
         </div>
         <div class="browser-last-product" v-if="usebrowserLastProductStore().name != ''">
           <h2>最近浏览</h2>

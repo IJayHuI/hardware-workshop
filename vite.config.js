@@ -6,10 +6,16 @@ export default defineConfig({
   server: {
     proxy: {
       '/server': {
-        target: 'https://server.jayhu.site/api',
+        target: 'https://strapi.jayhu.site/api',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/server/, ''),
         secure: true
+      },
+      '/tomcatServer': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/tomcatServer/, ''),
+        secure: false
       }
     },
     host: '0.0.0.0'

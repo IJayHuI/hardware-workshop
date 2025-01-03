@@ -18,12 +18,12 @@
     clearInterval(timer)
     useLoadingStore().bannerLoading = false
     axios
-      .get(`/server/hardware-workshop-banners?populate=image&filters[class][$eq]=${path}`)
+      .get(`/server/hardware-workshop-banners?populate=image&filters[type][$eq]=${path}`)
       .then((response) => {
         const rawData = []
         if (response.data.data && response.data.data.length > 0 && response.data.data[0].image) {
           response.data.data[0].image.forEach((image) => {
-            rawData.push('https://server.jayhu.site' + image.url)
+            rawData.push('https://strapi.jayhu.site' + image.url)
           })
         }
         // 克隆最后一张图片到最前面
@@ -34,10 +34,7 @@
         if (bannerData.value.length > 2) startCarousel()
       })
       .finally(() => {
-        setTimeout(
-          () => (useLoadingStore().bannerLoading = true), // 结束 loading
-          500
-        )
+        setTimeout(() => (useLoadingStore().bannerLoading = true), 500)
       })
   }
 

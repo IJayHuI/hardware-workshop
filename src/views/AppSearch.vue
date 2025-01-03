@@ -13,22 +13,15 @@
     searchProducts.value = []
     useLoadingStore().loadingStatus = true
     axios
-      .get(`/server/hardware-workshop-products?populate=thumbnail&fields[0]=name&fields[1]=price&fields[2]=model`)
+      .get(`/server/hardware-workshop-products?populate=mainThumbnail&filters[name][$containsi]=${search}`)
       .then((response) => {
-        const regex = new RegExp(search, 'i'); // 创建不区分大小写的正则表达式
-        const filteredProducts = response.data.data.filter((product) => {
-          return product && regex.test(product.name)
-        })
-        searchProducts.value = filteredProducts
+        searchProducts.value = response.data.data
       })
       .catch((error) => {
         console.log(error)
       })
       .finally(() => {
-        setTimeout(
-          () => (useLoadingStore().loadingStatus = false), // 结束 loading
-          500
-        )
+        setTimeout(() => (useLoadingStore().loadingStatus = false), 500)
       })
   }
 
@@ -49,7 +42,7 @@
   <div class="products page-size">
     <Card class="product" v-for="searchProduct in searchProducts" :key="searchProduct.id" @click="router.push('/product-detail?model=' + searchProduct.model)">
       <template #header>
-        <div class="product-thumbnail"><img :src="`https://server.jayhu.site${searchProduct.thumbnail[0].url}`" alt="product thumbnail" /></div>
+        <div v-if="searchProduct.mainThumbnail" class="product-thumbnail"><img :src="`https://strapi.jayhu.site${searchProduct.mainThumbnail.url}`" alt="product thumbnail" /></div>
       </template>
       <template #title>
         <p>{{ searchProduct.name }}</p>

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 
 import { ref, watch } from 'vue'
+import axios from 'axios'
 
 export const useLoadingStore = defineStore('loading', () => {
   const loadingStatus = ref(false)
@@ -40,7 +41,7 @@ export const useLoginStore = defineStore('login', () => {
   const loginStatus = ref(false)
 
   const checkStatus = () => {
-    if (sessionStorage.getItem('jwt') && sessionStorage.getItem('user')) loginStatus.value = true
+    loginStatus.value = sessionStorage.getItem('jwt') && sessionStorage.getItem('user') ? true : false
   }
   return {
     loginStatus,
@@ -56,5 +57,25 @@ export const usebrowserLastProductStore = defineStore('browserLastProduct', () =
     thunmnail,
     name,
     model
+  }
+})
+
+export const useCountCartStore = defineStore('countCart', () => {
+  const count = ref(0)
+  const getCount = () => {
+    axios
+      .get(`/server/hardware-workshop-carts?filters[user][documentId][$eq]=${JSON.parse(sessionStorage.getItem('user')).documentId}`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('jwt')}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then((response) => {
+        count.value = response.data.data.length
+      })
+  }
+  return {
+    count,
+    getCount
   }
 })

@@ -7,18 +7,9 @@
 
   useLoadingStore().homeOtherUnitLoading = false
   axios
-    .get('/server/hardware-workshop-homes?filters[priority][$gt]=3&populate=product&populate=image')
+    .get('/server/hardware-workshop-homes?sort[0]=priority:asc&filters[priority][$gt]=3&populate=product&populate=image')
     .then((response) => {
-      response.data.data.forEach((product) => {
-        otherUnitProducts.value.push({
-          image: product.image.url,
-          model: product.product.model,
-          name: product.product.name,
-          subtitle: product.subtitle,
-          whiteFontColor: product.whiteFontColor,
-          id: product.product.documentId
-        })
-      })
+      otherUnitProducts.value = response.data.data
     })
     .catch((error) => {
       console.error(error)
@@ -29,10 +20,10 @@
 <template>
   <div class="other-unit">
     <template v-for="otherUnitProduct in otherUnitProducts">
-      <router-link :to="'/product-detail?model=' + otherUnitProduct.model" class="link">
-        <img :src="'https://server.jayhu.site/' + otherUnitProduct.image" />
+      <router-link :to="'/product-detail?model=' + otherUnitProduct.product.model" class="link">
+        <img :src="'https://strapi.jayhu.site/' + otherUnitProduct.image.url" />
         <div class="info">
-          <h1 :style="otherUnitProduct.whiteFontColor ? 'color: white' : 'color: black'" style="font-size: 40px; text-align: center">{{ otherUnitProduct.name }}</h1>
+          <h1 :style="otherUnitProduct.whiteFontColor ? 'color: white' : 'color: black'" style="font-size: 40px; text-align: center">{{ otherUnitProduct.product.name }}</h1>
           <p :style="otherUnitProduct.whiteFontColor ? 'color: white' : 'color: black'" style="font-size: 21px; text-align: center" v-if="otherUnitProduct.subtitle != null">{{ otherUnitProduct.subtitle }}</p>
           <Button style="text-decoration: none; margin-top: 10px" label="进一步了解" severity="info" rounded></Button>
         </div>
