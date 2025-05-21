@@ -21,7 +21,7 @@
   <div class="other-unit">
     <template v-for="otherUnitProduct in otherUnitProducts">
       <router-link :to="'/product-detail?model=' + otherUnitProduct.product.model" class="link">
-        <img :src="'https://strapi.jayhu.site/' + otherUnitProduct.image.url" />
+        <img :src="'https://strapi.jayhu.site' + otherUnitProduct.image.url" />
         <div class="info">
           <h1 :style="otherUnitProduct.whiteFontColor ? 'color: white' : 'color: black'" style="font-size: 40px; text-align: center">{{ otherUnitProduct.product.name }}</h1>
           <p :style="otherUnitProduct.whiteFontColor ? 'color: white' : 'color: black'" style="font-size: 21px; text-align: center" v-if="otherUnitProduct.subtitle != null">{{ otherUnitProduct.subtitle }}</p>

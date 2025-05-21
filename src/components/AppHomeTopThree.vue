@@ -20,7 +20,7 @@
   <div class="top-three">
     <template v-for="topThreeProduct in topThreeProducts">
       <router-link :to="'/product-detail?model=' + topThreeProduct.product.model" class="link">
-        <img :src="'https://strapi.jayhu.site/' + topThreeProduct.image.url" />
+        <img :src="'https://strapi.jayhu.site' + topThreeProduct.image.url" />
         <div class="info">
           <h1 :style="topThreeProduct.whiteFontColor ? 'color: white' : 'color: black'" style="font-size: 56px">{{ topThreeProduct.product.name }}</h1>
           <p :style="topThreeProduct.whiteFontColor ? 'color: white' : 'color: black'" style="font-size: 28px" v-if="topThreeProduct.subtitle != null">{{ topThreeProduct.subtitle }}</p>
